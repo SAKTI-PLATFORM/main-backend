@@ -1,170 +1,122 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# SAKTI AI — Backend
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+> Platform *job matching end-to-end* berbasis AI untuk mengatasi *mismatch* tenaga kerja digital Indonesia.
 
-  <p align="center">Nest TypeScript starter kit by AghnatHs</p>
-    <p align="center">
+## 🚀 Progress
 
-## Description
+- [x] Inisialisasi proyek NestJS berbasis 
+- [x] Konfigurasi arsitektur DDD + VSA (*Domain-Driven Design* + *Vertical Slice Architecture*)
+- [x] Setup TypeORM beserta sistem migrasi database
+- [x] Konfigurasi Logger (Pino) — log ke konsol & file dengan rotasi harian
+- [x] Setup ExceptionFilter untuk penanganan error dan HTTPException
+- [x] Setup Interceptor untuk standarisasi *response* sukses
+- [x] Centralized *response* menggunakan `HTTPResponse` class
+- [x] Konfigurasi *environment* per tahap (`.env.development`, `.env.production`, `.env.test`)
+- [ ] Implementasi domain & *use case* utama (Jobseeker, Recruiter, Job)
+- [ ] Implementasi autentikasi JWT (HS512) + bcrypt
+- [ ] Konfigurasi RBAC (*Role-Based Access Control*)
+- [ ] Integrasi Qdrant *vector database*
+- [ ] Integrasi Neo4J *graph database*
+- [ ] Integrasi FastAPI AI Engine (LMProfiler, Matchmaker, TalentForger)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript core kit (mainly for personal use), with pre-configure TypeORM, Logger (Pino), ExceptionFilter, and Interceptor.
+## 🛠️ Tech Stack
 
-## Disclaimer
+| Layer | Teknologi |
+|---|---|
+| Framework | NestJS (TypeScript) |
+| Arsitektur | DDD + VSA |
+| ORM | TypeORM (dengan migrasi) |
+| Database | MySQL |
+| Logger | Pino (konsol + file, rotasi harian) |
+| Response | HTTPResponse class (terpusat) |
+| Error Handling | ExceptionFilter global |
+| Containerisasi | Docker |
+| AI Service | FastAPI (servis terpisah) |
+| Vector DB | Qdrant |
+| Graph DB | Neo4J / AuraDB |
+| Caching | Redis |
 
-This project is an independent starter kit built on top of the NestJS framework. It is not officially affiliated with, endorsed by, or maintained by the NestJS team.
+## 📁 Struktur Folder
 
-It is intended solely for my personal use to accelerate development by providing preconfigured modules such as logging, validation, and database integration.
-
-Use at your own discretion.
-
-## What already configured
-
-- TypeORM (migrations included by command "npm run migration:\*")
-- Logger (Pino) (log to console and files (daily rotation))
-- ExceptionFilter (when response is error or HTTPException)
-- Interceptor (when response is success)
-
-- Centralized response using HTTPResponse class for consistency
-- .env.\* (per development)
-
-## How I structure the project
-
-I use a DDD + VSA-inspired structure, but not strictly follow DDD principles. The goal is to pragmatically separate concerns and keep the codebase easy to maintain and understand.
-
-- Domain → Domain models + domain services
-- Features (UseCases) → API layer (Controllers) + application services (UseCases) + DTOs + validators
-- Infrastructure → ORM (TypeORM) + Express (NestJS) + Logger (Pino) + ExceptionFilter + Interceptor
-- Libs → reusable by Domain or Features (pure, no framework dependencies)
-- Migrations → depend on Infrastructure (ORM)
-- Types → mostly for extending Express.Request and Express.Response, but can be used for other shared types
-
-## Project setup
-
-```bash
-use the template to create your own repository, with (Use this template) butotn
-
-$ git clone https://github.com/your-username/your-repository.git .
-
-$ cd your-repository
-
-$ npm install
-
-# setup .env.production, .env.development, and .env.test from .env.example
-$ cp .env.example .env.production
-$ cp .env.example .env.staging # optional in production environment
-$ cp .env.example .env.development # optional in production environment
-$ cp .env.example .env.test # optional in production environment
-
-$ mkdir logs
-
-$ npm run start:dev
+```
+src/
+├── domain/           # Domain models + domain services
+├── features/         # Controllers + UseCases + DTOs + validators
+├── infrastructure/   # TypeORM + NestJS + Pino + ExceptionFilter + Interceptor
+├── libs/             # Reusable utilities (pure, no framework dependencies)
+├── migrations/       # File migrasi database
+└── types/            # Shared types (extend Express.Request / Response)
 ```
 
-## Migration
-
-## Migration (Development)
-
-Migration in development will use .env.development
+## ⚙️ Instalasi
 
 ```bash
-# Apply all migration to database
-$ npm run migration:run
+# Clone repo
+git clone https://github.com/BI-OJK-HACKATHON/main-backend
+cd main-backend
 
-# generate migration based on current entities (Linux / MacOs)
-$ npm run migration:generate --name=CreateUsersTable
-# generate migration based on current entities (Windows)
-$ npm run migration:generate:win --name=CreateUsersTable
+# Install dependencies
+npm install
 
-# create empty migration file (Linux / MacOs)
-$ npm run migration:create --name=CustomMigration
-# create empty migration file (Windows)
-$ npm run migration:create:win --name=CustomMigration
+# Setup environment
+cp .env.example .env.development
+mkdir logs
 
-# undo most recent migration
-$ npm run migration:revert
+# Jalankan migrasi
+npm run migration:run
+
+# Jalankan development server
+npm run start:dev
 ```
 
-- Never edit existing migration, create a new one instead
-- On Windows, use the \*:win variants because environment variable syntax differs (%VAR% - $VAR).
-
-## Migration (Production)
-
-For running a newly migration in production using .env.production, just run this command
+## 🗄️ Migrasi Database
 
 ```bash
-$ npm run migration:run:production
+# Terapkan semua migrasi
+npm run migration:run
+
+# Generate migrasi baru dari entity (Linux/macOS)
+npm run migration:generate --name=NamaMigrasi
+
+# Generate migrasi baru dari entity (Windows)
+npm run migration:generate:win --name=NamaMigrasi
+
+# Batalkan migrasi terakhir
+npm run migration:revert
 ```
 
-## Migration (Staging)
+> Jangan edit migrasi yang sudah ada — buat file migrasi baru.
 
-For running a newly migration in staging using .env.staging, just run this command
+## 🐳 Menjalankan dengan Docker
 
 ```bash
-$ npm run migration:run:staging
+# Production
+cp .env.example .env
+docker build --build-arg NODE_ENV=production -t sakti-backend .
+docker run -d -p 3000:3000 --env-file .env --name sakti-backend sakti-backend
+
+# Staging
+cp .env.example .env.staging
+docker build --build-arg NODE_ENV=staging -t sakti-backend:staging .
+docker run -d -p 3000:3000 --env-file .env.staging --name sakti-backend-staging sakti-backend:staging
 ```
 
-## Migration (Using compiled js)
-
-If you want to run migration using compiled javascript files on dist folder, you can use this command
+## 🧪 Testing
 
 ```bash
-$ npm run build
+# Unit test
+npm run test
 
-# For production, will use .env.production
-$ NODE_ENV=production npm run migration:run:js
+# Unit test (verbose)
+npm run test:verbose
 
-# For staging, will use .env.staging
-$ NODE_ENV=staging npm run migration:run:js
+# E2E test
+npm run test:e2e
+
+# Coverage
+npm run test:cov
 ```
 
-## Compile and run the project
+## 📄 Dokumentasi Terkait
 
-```bash
-# development mode, will use .env.development
-$ cp .env.example .env.development
-$ npm run migration:run
-$ npm run start:dev
-
-# production mode, will use .env.production
-$ cp .env.example .env.production
-$ npm run build
-$ npm run migration:run:production
-$ npm run start:prod
-
-# using docker (production)
-$ cp .env.example .env
-$ docker build --build-arg NODE_ENV=production -t nest-core-kit .
-$ docker run -d -p 3000:3000 --env-file .env --name nest-core-kit-container nest-core-kit
-
-# using docker (staging)
-$ cp .env.example .env.staging
-$ docker build --build-arg NODE_ENV=staging -t nest-core-kit:staging .
-$ docker run -d -p 3000:3000 --env-file .env.staging --name nest-core-kit-staging nest-core-kit:staging
-```
-
-## Run tests
-
-```bash
-# unit tests
-$ npm run test
-
-# unit tests (verbose)
-$ npm run test:verbose
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Deployment
-
-TODO
-
-## License
-
-[MIT licensed](https://github.com/AghnatHs/nest-core-kit/blob/main/LICENSE).
+Lihat documentation https://github.com/BI-OJK-HACKATHON/sakti-product-docs untuk PRD, market research, dan CJM lengkap.
