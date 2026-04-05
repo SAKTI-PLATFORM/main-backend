@@ -51,7 +51,7 @@ src/
 
 ```bash
 # Clone repo
-git clone https://github.com/BI-OJK-HACKATHON/main-backend
+git clone https://github.com/SAKTI-PLATFORM/main-backend
 cd main-backend
 
 # Install dependencies
@@ -118,4 +118,4 @@ npm run test:cov
 
 ## 📄 Dokumentasi Terkait
 
-Lihat documentation https://github.com/BI-OJK-HACKATHON/sakti-product-docs untuk PRD, market research, dan CJM lengkap.
+Lihat documentation https://github.com/SAKTI-PLATFORM/sakti-product-docs untuk PRD, market research, dan CJM lengkap.
