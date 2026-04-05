@@ -2,7 +2,7 @@
 
 > Platform *job matching end-to-end* berbasis AI untuk mengatasi *mismatch* tenaga kerja digital Indonesia.
 
-## 🚀 Progress
+## Progress
 
 - [x] Inisialisasi proyek NestJS berbasis 
 - [x] Konfigurasi arsitektur DDD + VSA (*Domain-Driven Design* + *Vertical Slice Architecture*)
@@ -19,7 +19,7 @@
 - [ ] Integrasi Neo4J *graph database*
 - [ ] Integrasi FastAPI AI Engine (LMProfiler, Matchmaker, TalentForger)
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Layer | Teknologi |
 |---|---|
@@ -35,7 +35,7 @@
 | Vector DB | Qdrant |
 | Caching | Redis |
 
-## 📁 Struktur Folder
+## Struktur Folder
 
 ```
 src/
@@ -47,7 +47,7 @@ src/
 └── types/            # Shared types (extend Express.Request / Response)
 ```
 
-## ⚙️ Instalasi
+## Instalasi
 
 ```bash
 # Clone repo
@@ -68,7 +68,7 @@ npm run migration:run
 npm run start:dev
 ```
 
-## 🗄️ Migrasi Database
+## Migrasi Database
 
 ```bash
 # Terapkan semua migrasi
@@ -86,7 +86,7 @@ npm run migration:revert
 
 > Jangan edit migrasi yang sudah ada — buat file migrasi baru.
 
-## 🐳 Menjalankan dengan Docker
+## Menjalankan dengan Docker
 
 ```bash
 # Production
@@ -100,7 +100,7 @@ docker build --build-arg NODE_ENV=staging -t sakti-backend:staging .
 docker run -d -p 3000:3000 --env-file .env.staging --name sakti-backend-staging sakti-backend:staging
 ```
 
-## 🧪 Testing
+## Testing
 
 ```bash
 # Unit test
@@ -116,6 +116,6 @@ npm run test:e2e
 npm run test:cov
 ```
 
-## 📄 Dokumentasi Terkait
+## Dokumentasi Terkait
 
 Lihat documentation https://github.com/SAKTI-PLATFORM/sakti-product-docs untuk PRD, market research, dan CJM lengkap.
