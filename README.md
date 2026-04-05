@@ -118,4 +118,4 @@ npm run test:cov
 
 ## Dokumentasi Terkait
 
-Lihat documentation https://github.com/SAKTI-PLATFORM/sakti-product-docs untuk PRD, market research, dan CJM lengkap.
+Lihat documentation [SAKTI-PLATFORM/sakti-product-docs](https://github.com/SAKTI-PLATFORM/sakti-product-docs) untuk PRD, market research, dan CJM lengkap.
