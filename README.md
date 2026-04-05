@@ -33,7 +33,6 @@
 | Containerisasi | Docker |
 | AI Service | FastAPI (servis terpisah) |
 | Vector DB | Qdrant |
-| Graph DB | Neo4J / AuraDB |
 | Caching | Redis |
 
 ## 📁 Struktur Folder
