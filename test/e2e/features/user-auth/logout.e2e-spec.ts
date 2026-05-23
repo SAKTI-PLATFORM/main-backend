@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { INestApplication } from '@nestjs/common';
-import { MessageResponse } from 'src/infrastructure/core/http/http-response';
 import { User } from 'src/domain/entity/user.entity';
+import { MessageResponse } from 'src/infrastructure/core/http/http-response';
 import request from 'supertest';
 import TestAgent from 'supertest/lib/agent';
 import { App } from 'supertest/types';

@@ -37,9 +37,7 @@ export class CreateUsersCreateUserRolesTables1779494400001 implements MigrationI
       `ALTER TABLE \`user_roles\` DROP FOREIGN KEY \`FK_user_roles_user_id\``,
     );
     await queryRunner.query(`DROP TABLE \`user_roles\``);
-    await queryRunner.query(
-      `DROP INDEX \`IDX_users_email\` ON \`users\``,
-    );
+    await queryRunner.query(`DROP INDEX \`IDX_users_email\` ON \`users\``);
     await queryRunner.query(`DROP TABLE \`users\``);
   }
 }

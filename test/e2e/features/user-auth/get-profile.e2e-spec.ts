@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { INestApplication } from '@nestjs/common';
-import { DataResponse } from 'src/infrastructure/core/http/http-response';
 import { UserRoleEnum } from 'src/domain/enums/user-role.enum';
+import { DataResponse } from 'src/infrastructure/core/http/http-response';
 import { ProfileResponse } from 'src/libs/Mapper/UserMapper';
 import request from 'supertest';
 import TestAgent from 'supertest/lib/agent';
@@ -60,7 +60,10 @@ describe('Get Profile (e2e)', () => {
       expect(body).toHaveProperty('message', 'Profil berhasil diambil');
       expect(body).toHaveProperty('data');
       expect(body.data).toHaveProperty('id', user.id);
-      expect(body.data).toHaveProperty('email', defaultJobSeekerCredentials.email);
+      expect(body.data).toHaveProperty(
+        'email',
+        defaultJobSeekerCredentials.email,
+      );
       expect(body.data).toHaveProperty('roles');
       expect(body.data.roles).toContain(UserRoleEnum.JOB_SEEKER);
     });
@@ -77,7 +80,10 @@ describe('Get Profile (e2e)', () => {
       const body = response.body as DataResponse<ProfileResponse>;
       expect(body).toHaveProperty('statusCode', 200);
       expect(body.data).toHaveProperty('id', user.id);
-      expect(body.data).toHaveProperty('email', defaultRecruiterCredentials.email);
+      expect(body.data).toHaveProperty(
+        'email',
+        defaultRecruiterCredentials.email,
+      );
       expect(body.data.roles).toContain(UserRoleEnum.RECRUITER);
     });
 

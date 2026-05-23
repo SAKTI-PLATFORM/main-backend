@@ -1,15 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { INestApplication } from '@nestjs/common';
 import { IAuthToken } from 'src/auth/interfaces/auth-token.interface';
-import { DataResponse } from 'src/infrastructure/core/http/http-response';
 import { User } from 'src/domain/entity/user.entity';
 import { UserRoleEnum } from 'src/domain/enums/user-role.enum';
+import { DataResponse } from 'src/infrastructure/core/http/http-response';
 import request from 'supertest';
 import TestAgent from 'supertest/lib/agent';
 import { App } from 'supertest/types';
 import { DataSource } from 'typeorm';
 import createTestingApp from '../../../utils/create-testing-app.utils';
-import { defaultJobSeekerCredentials } from '../../../utils/test-helpers.utils';
 import {
   clearDatabase,
   createTestDatabase,

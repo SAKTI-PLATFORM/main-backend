@@ -55,14 +55,13 @@ export class GoogleAuthUseCase {
         name: payload.name ?? payload.email.split('@')[0],
       };
     } catch {
-      throw new UnauthorizedException('Token Google tidak valid atau sudah kadaluarsa');
+      throw new UnauthorizedException(
+        'Token Google tidak valid atau sudah kadaluarsa',
+      );
     }
 
     let user = await this.userRepository.findOne({
-      where: [
-        { googleId: googlePayload.sub },
-        { email: googlePayload.email },
-      ],
+      where: [{ googleId: googlePayload.sub }, { email: googlePayload.email }],
       relations: ['userRoles'],
     });
 
@@ -84,7 +83,9 @@ export class GoogleAuthUseCase {
       user.userRoles = [userRole];
 
       await this.userRepository.save(user);
-      this.logger.log(`New user registered via Google: ${user.email} as ${dto.role}`);
+      this.logger.log(
+        `New user registered via Google: ${user.email} as ${dto.role}`,
+      );
     } else {
       if (!user.googleId) {
         user.googleId = googlePayload.sub;

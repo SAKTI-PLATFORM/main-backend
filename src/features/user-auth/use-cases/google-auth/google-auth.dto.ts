@@ -17,6 +17,8 @@ export class GoogleAuthDto {
     example: UserRoleEnum.JOB_SEEKER,
   })
   @IsOptional()
-  @IsEnum(UserRoleEnum, { message: 'Role tidak valid. Pilih JOB_SEEKER atau RECRUITER' })
+  @IsEnum(UserRoleEnum, {
+    message: 'Role tidak valid. Pilih JOB_SEEKER atau RECRUITER',
+  })
   role?: UserRoleEnum;
 }

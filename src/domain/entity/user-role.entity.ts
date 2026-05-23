@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import { Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { UserRoleEnum } from '../enums/user-role.enum';
 import { ITimestamp } from './abstract/timestamp.entity';
 import { User } from './user.entity';

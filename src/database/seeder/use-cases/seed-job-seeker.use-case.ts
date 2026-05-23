@@ -34,7 +34,11 @@ export class SeedJobSeekerUseCase extends ISeederUseCase {
     }
 
     const hashedPassword = await PasswordHasher.hash(password);
-    const user = manager.create(User, { username: name, email, hashedPassword });
+    const user = manager.create(User, {
+      username: name,
+      email,
+      hashedPassword,
+    });
     const savedUser = await manager.save(user);
     this.logger.log(`Job seeker user "${name}" created`);
 

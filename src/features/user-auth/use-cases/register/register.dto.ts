@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsEnum, IsNotEmpty, IsString, MinLength } from 'class-validator';
+import {
+  IsEmail,
+  IsEnum,
+  IsNotEmpty,
+  IsString,
+  MinLength,
+} from 'class-validator';
 import { UserRoleEnum } from 'src/domain/enums/user-role.enum';
 
 export class RegisterDto {
@@ -42,6 +48,8 @@ export class RegisterDto {
     example: UserRoleEnum.JOB_SEEKER,
   })
   @IsNotEmpty({ message: 'Role tidak boleh kosong' })
-  @IsEnum(UserRoleEnum, { message: 'Role tidak valid. Pilih JOB_SEEKER atau RECRUITER' })
+  @IsEnum(UserRoleEnum, {
+    message: 'Role tidak valid. Pilih JOB_SEEKER atau RECRUITER',
+  })
   role: UserRoleEnum;
 }

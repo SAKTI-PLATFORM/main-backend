@@ -22,7 +22,9 @@ export class SeederService {
       if (process.env.NODE_ENV !== 'production') {
         await this.seedRecruiterUseCase.execute(manager);
       } else {
-        this.logger.log('Skipping development seeders in production environment.');
+        this.logger.log(
+          'Skipping development seeders in production environment.',
+        );
       }
     });
 
@@ -54,7 +56,9 @@ export class SeederService {
 
   async reset(): Promise<void> {
     if (process.env.NODE_ENV === 'production') {
-      this.logger.error('Reset operation is not allowed in production environment.');
+      this.logger.error(
+        'Reset operation is not allowed in production environment.',
+      );
       return;
     }
     await this.clear();
@@ -63,7 +67,9 @@ export class SeederService {
 
   async truncate(): Promise<void> {
     if (process.env.NODE_ENV === 'production') {
-      this.logger.error('Truncate operation is not allowed in production environment.');
+      this.logger.error(
+        'Truncate operation is not allowed in production environment.',
+      );
       return;
     }
 

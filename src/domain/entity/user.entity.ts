@@ -26,7 +26,12 @@ export class User extends ITimestamp {
   @Column({ type: 'varchar', length: 255 })
   email: string;
 
-  @Column({ type: 'varchar', length: 255, name: 'hashed_password', nullable: true })
+  @Column({
+    type: 'varchar',
+    length: 255,
+    name: 'hashed_password',
+    nullable: true,
+  })
   @Exclude()
   hashedPassword?: string | null;
 

@@ -21,7 +21,10 @@ import { AuthRoleEnum } from 'src/auth/enums/auth.enum';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { IAuthToken } from 'src/auth/interfaces/auth-token.interface';
 import { ICurrentUser } from 'src/auth/interfaces/current-user.interface';
-import { DataResponse, MessageResponse } from 'src/infrastructure/core/http/http-response';
+import {
+  DataResponse,
+  MessageResponse,
+} from 'src/infrastructure/core/http/http-response';
 import { ProfileResponse } from 'src/libs/Mapper/UserMapper';
 import {
   GetProfileUseCase,
@@ -60,9 +63,7 @@ export class UserAuthController {
   @ApiResponse({ status: 201, description: 'Registrasi berhasil' })
   @ApiResponse({ status: 400, description: 'Validasi gagal' })
   @ApiResponse({ status: 409, description: 'Email sudah terdaftar' })
-  async register(
-    @Body() dto: RegisterDto,
-  ): Promise<DataResponse<IAuthToken>> {
+  async register(@Body() dto: RegisterDto): Promise<DataResponse<IAuthToken>> {
     const token: IAuthToken = await this.registerUseCase.execute(dto);
     return new DataResponse<IAuthToken>(201, 'Registrasi berhasil', token);
   }
@@ -76,9 +77,7 @@ export class UserAuthController {
   @ApiBody({ type: LoginDto })
   @ApiResponse({ status: 200, description: 'Login berhasil' })
   @ApiResponse({ status: 401, description: 'Email atau password salah' })
-  async login(
-    @Body() dto: LoginDto,
-  ): Promise<DataResponse<IAuthToken>> {
+  async login(@Body() dto: LoginDto): Promise<DataResponse<IAuthToken>> {
     const token: IAuthToken = await this.loginUseCase.execute(dto);
     return new DataResponse<IAuthToken>(200, 'Login berhasil', token);
   }
@@ -98,7 +97,11 @@ export class UserAuthController {
     @Body() dto: GoogleAuthDto,
   ): Promise<DataResponse<IAuthToken>> {
     const token: IAuthToken = await this.googleAuthUseCase.execute(dto);
-    return new DataResponse<IAuthToken>(200, 'Autentikasi Google berhasil', token);
+    return new DataResponse<IAuthToken>(
+      200,
+      'Autentikasi Google berhasil',
+      token,
+    );
   }
 
   @Get('me')
@@ -124,7 +127,11 @@ export class UserAuthController {
     const profile: ProfileResponse = await this.getProfileUseCase.execute(
       currentUser.id,
     );
-    return new DataResponse<ProfileResponse>(200, 'Profil berhasil diambil', profile);
+    return new DataResponse<ProfileResponse>(
+      200,
+      'Profil berhasil diambil',
+      profile,
+    );
   }
 
   @Post('logout')
