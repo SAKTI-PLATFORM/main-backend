@@ -22,4 +22,9 @@ export default Joi.object({
 
   TYPEORM_SYNC: Joi.boolean().default(false),
   TYPEORM_LOGGING: Joi.boolean().default(false),
+
+  JWT_SECRET: Joi.string().required(),
+  JWT_EXPIRES: Joi.string().default('7d'),
+
+  GOOGLE_CLIENT_ID: Joi.string().optional(),
 });

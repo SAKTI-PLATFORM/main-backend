@@ -6,6 +6,7 @@ import app from './infrastructure/config/app/app.config';
 import { dataSourceOptions } from './infrastructure/config/database/typeorm.config';
 import environmentValidation from './infrastructure/config/environment.validation';
 import { createPinoLoggerOptions } from './infrastructure/core/logger/pino-logger.factory';
+import { UserAuthModule } from './features/user-auth/user-auth.module';
 
 const env: string = process.env.NODE_ENV || 'development';
 
@@ -27,6 +28,8 @@ const env: string = process.env.NODE_ENV || 'development';
       ...dataSourceOptions,
       autoLoadEntities: true,
     }),
+
+    UserAuthModule,
   ],
 })
 export class AppModule {}
