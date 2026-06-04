@@ -12,4 +12,10 @@ export default registerAs('app', () => ({
   google: {
     clientId: process.env.GOOGLE_CLIENT_ID,
   },
+  saktiAi: {
+    url: process.env.SAKTI_AI_URL || 'http://localhost:8001',
+  },
+  microservices: {
+    url: process.env.MICROSERVICES_URL || 'http://localhost:9000',
+  },
 }));
