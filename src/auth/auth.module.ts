@@ -22,6 +22,8 @@ import { AuthService } from './auth.service';
     TypeOrmModule.forFeature([User]),
   ],
   providers: [AuthService],
-  exports: [AuthService],
+  // Re-export the User repository so any module importing AuthModule (i.e. using
+  // AuthGuard) can resolve @InjectRepository(User) without repeating forFeature.
+  exports: [AuthService, TypeOrmModule],
 })
 export class AuthModule {}
