@@ -37,14 +37,14 @@ export class LoginUseCase {
       throw new UnauthorizedException('Email atau password salah');
     }
 
-    if (!user.hashedPassword) {
+    if (!user.passwordHash) {
       throw new UnauthorizedException(
         'Akun ini terdaftar melalui Google. Silakan login dengan Google.',
       );
     }
 
     const isValidPassword: boolean = await PasswordHasher.verify(
-      user.hashedPassword,
+      user.passwordHash,
       dto.password,
     );
 
@@ -54,17 +54,14 @@ export class LoginUseCase {
     }
 
     const currentUser: ICurrentUser = {
-      id: user.id,
-      username: user.username,
+      userId: user.userId,
+      fullName: user.fullName,
       email: user.email,
-      roles: user.userRoles.map((role) => role.roleName),
+      roles: user.userRoles.map((role) => role.role),
       uniqueKey: randomUUID(),
     };
 
     const token: string = this.authService.generateJwtToken(currentUser);
-    user.activeToken = token;
-    await this.userRepository.save(user);
-
     return { token };
   }
 }

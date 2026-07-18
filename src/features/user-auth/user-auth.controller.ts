@@ -21,16 +21,12 @@ import { AuthRoleEnum } from 'src/auth/enums/auth.enum';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { IAuthToken } from 'src/auth/interfaces/auth-token.interface';
 import { ICurrentUser } from 'src/auth/interfaces/current-user.interface';
-import {
-  DataResponse,
-  MessageResponse,
-} from 'src/infrastructure/core/http/http-response';
+import { DataResponse } from 'src/infrastructure/core/http/http-response';
 import { ProfileResponse } from 'src/libs/Mapper/UserMapper';
 import {
   GetProfileUseCase,
   GoogleAuthUseCase,
   LoginUseCase,
-  LogoutUseCase,
   RegisterUseCase,
 } from './use-cases';
 import { GoogleAuthDto } from './use-cases/google-auth/google-auth.dto';
@@ -49,8 +45,6 @@ export class UserAuthController {
     private readonly googleAuthUseCase: GoogleAuthUseCase,
     @Inject()
     private readonly getProfileUseCase: GetProfileUseCase,
-    @Inject()
-    private readonly logoutUseCase: LogoutUseCase,
   ) {}
 
   @Post('register')
@@ -125,32 +119,12 @@ export class UserAuthController {
     @CurrentUser() currentUser: ICurrentUser,
   ): Promise<DataResponse<ProfileResponse>> {
     const profile: ProfileResponse = await this.getProfileUseCase.execute(
-      currentUser.id,
+      currentUser.userId,
     );
     return new DataResponse<ProfileResponse>(
       200,
       'Profil berhasil diambil',
       profile,
     );
-  }
-
-  @Post('logout')
-  @HttpCode(200)
-  @UseGuards(AuthGuard)
-  @RequireRole(AuthRoleEnum.ANY)
-  @ApiBearerAuth()
-  @ApiOperation({
-    summary: 'Logout',
-    description: 'Logout dan invalidate token aktif',
-  })
-  @ApiResponse({ status: 200, description: 'Logout berhasil' })
-  @ApiUnauthorizedResponse({
-    description: 'Unauthorized - Token tidak valid atau tidak ada',
-  })
-  async logout(
-    @CurrentUser() currentUser: ICurrentUser,
-  ): Promise<MessageResponse> {
-    await this.logoutUseCase.execute(currentUser);
-    return new MessageResponse(200, 'Logout berhasil');
   }
 }

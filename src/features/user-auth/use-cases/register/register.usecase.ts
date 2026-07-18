@@ -4,8 +4,10 @@ import { randomUUID } from 'node:crypto';
 import { AuthService } from 'src/auth/auth.service';
 import { IAuthToken } from 'src/auth/interfaces/auth-token.interface';
 import { ICurrentUser } from 'src/auth/interfaces/current-user.interface';
+import { JobseekerProfile } from 'src/domain/entity/jobseeker-profile.entity';
 import { UserRole } from 'src/domain/entity/user-role.entity';
 import { User } from 'src/domain/entity/user.entity';
+import { UserRoleEnum } from 'src/domain/enums/user-role.enum';
 import { Repository } from 'typeorm';
 import { RegisterDto } from './register.dto';
 
@@ -33,29 +35,32 @@ export class RegisterUseCase {
       email: dto.email,
       password: dto.password,
       confirmationPassword: dto.confirmationPassword,
-      username: dto.fullName,
+      fullName: dto.fullName,
     });
 
     const userRole = new UserRole();
-    userRole.roleName = dto.role;
+    userRole.role = dto.role;
     user.userRoles = [userRole];
+
+    if (dto.role === UserRoleEnum.JOB_SEEKER) {
+      const profile = new JobseekerProfile();
+      profile.user = user;
+      user.jobseekerProfile = profile;
+    }
 
     await this.userRepository.save(user);
 
     this.logger.log(`New user registered: ${user.email} as ${dto.role}`);
 
     const currentUser: ICurrentUser = {
-      id: user.id,
-      username: user.username,
+      userId: user.userId,
+      fullName: user.fullName,
       email: user.email,
       roles: [dto.role],
       uniqueKey: randomUUID(),
     };
 
     const token: string = this.authService.generateJwtToken(currentUser);
-    user.activeToken = token;
-    await this.userRepository.save(user);
-
     return { token };
   }
 }

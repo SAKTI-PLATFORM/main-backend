@@ -15,8 +15,8 @@ export class GetProfileUseCase {
 
   public async execute(userId: string): Promise<ProfileResponse> {
     const user: User | null = await this.userRepository.findOne({
-      where: { id: userId },
-      relations: ['userRoles'],
+      where: { userId },
+      relations: ['userRoles', 'jobseekerProfile'],
     });
     if (!user) {
       this.logger.warn(`User not found with ID: ${userId}`);

@@ -5,9 +5,12 @@ import { UserRoleEnum } from 'src/domain/enums/user-role.enum';
 export class UserMapper {
   static toProfileResponse(user: User): ProfileResponse {
     return {
-      id: user.id,
-      username: user.username,
+      userId: user.userId,
+      fullName: user.fullName,
       email: user.email,
+      phoneNumber: user.phoneNumber ?? null,
+      photoUrl: user.photoUrl ?? null,
+      domicile: user.domicile ?? null,
       roles: user.getRoleNames(),
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
@@ -17,16 +20,25 @@ export class UserMapper {
 
 export class ProfileResponse {
   @ApiProperty({ description: 'User ID', example: 'uuid-string' })
-  id: string;
+  userId: string;
 
   @ApiProperty({ description: 'Full name', example: 'John Doe' })
-  username: string;
+  fullName: string;
 
   @ApiProperty({
     description: 'User email address',
     example: 'john@example.com',
   })
   email: string;
+
+  @ApiProperty({ nullable: true, example: '+6281234567890' })
+  phoneNumber: string | null;
+
+  @ApiProperty({ nullable: true, example: 'https://example.com/photo.jpg' })
+  photoUrl: string | null;
+
+  @ApiProperty({ nullable: true, example: 'Jakarta' })
+  domicile: string | null;
 
   @ApiProperty({
     description: 'User roles',

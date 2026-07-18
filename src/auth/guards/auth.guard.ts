@@ -40,19 +40,17 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException(
         'UNAUTHORIZED: Missing authorization header',
       );
-    const token: string = authHeader.split(' ')[1];
-    if (!token) throw new UnauthorizedException('UNAUTHORIZED: Missing token');
-
-    const isTokenExistInDb: boolean = await this.userRepository
-      .createQueryBuilder('user')
-      .where('user.active_token = :token', { token: token })
-      .getCount()
-      .then((count: number) => count > 0);
-    if (!isTokenExistInDb) {
-      throw new UnauthorizedException('UNAUTHORIZED: Token not recognized');
+    const [scheme, token] = authHeader.split(' ');
+    if (scheme !== 'Bearer' || !token) {
+      throw new UnauthorizedException('UNAUTHORIZED: Invalid bearer token');
     }
 
-    const user: ICurrentUser | null = this.authService.verifyJwtToken(token);
+    let user: ICurrentUser | null;
+    try {
+      user = this.authService.verifyJwtToken(token);
+    } catch {
+      throw new UnauthorizedException('UNAUTHORIZED: Invalid token');
+    }
     if (!user) {
       throw new UnauthorizedException(
         'UNAUTHORIZED: Invalid token verification',
@@ -60,6 +58,13 @@ export class AuthGuard implements CanActivate {
     }
 
     request[AUTH_REQUEST_USER_KEY] = user;
+
+    const userExists = await this.userRepository.exists({
+      where: { userId: user.userId },
+    });
+    if (!userExists) {
+      throw new UnauthorizedException('UNAUTHORIZED: User tidak ditemukan');
+    }
 
     if (requiredRoles && requiredRoles.length > 0) {
       if (!requiredRoles.includes(AuthRoleEnum.ANY)) {
