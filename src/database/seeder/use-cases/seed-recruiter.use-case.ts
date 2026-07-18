@@ -5,6 +5,7 @@ import { User } from 'src/domain/entity/user.entity';
 import { UserRoleEnum } from 'src/domain/enums/user-role.enum';
 import { PasswordHasher } from 'src/libs/PasswordHasher/PasswordHasher';
 import { EntityManager } from 'typeorm';
+import { uuidv7 } from 'uuidv7';
 import { ISeederUseCase } from './abstract-seeder-usecase';
 
 interface RecruiterConfig {
@@ -52,21 +53,24 @@ export class SeedRecruiterUseCase extends ISeederUseCase {
   }
 
   async truncate(manager: EntityManager): Promise<void> {
-    this.logger.log('Truncating users and user_roles tables...');
+    this.logger.log('Truncating user and user_role tables...');
 
     await manager.query('SET FOREIGN_KEY_CHECKS = 0');
-    await manager.query('TRUNCATE TABLE `user_roles`');
-    await manager.query('TRUNCATE TABLE `users`');
+    await manager.query('TRUNCATE TABLE `user_role`');
+    await manager.query('TRUNCATE TABLE `user`');
     await manager.query('SET FOREIGN_KEY_CHECKS = 1');
 
-    this.logger.log('Users and user_roles tables truncated successfully');
+    this.logger.log('User and user_role tables truncated successfully');
   }
 
   private async seedRecruiter(
     manager: EntityManager,
     config: RecruiterConfig,
   ): Promise<void> {
-    const existingUser = await manager.findOne(User, {
+    const userRepository = manager.getRepository(User);
+    const userRoleRepository = manager.getRepository(UserRole);
+
+    const existingUser = await userRepository.findOne({
       where: { email: config.email },
     });
 
@@ -75,22 +79,24 @@ export class SeedRecruiterUseCase extends ISeederUseCase {
       return;
     }
 
-    const hashedPassword = await PasswordHasher.hash(config.password);
-    const user = manager.create(User, {
-      username: config.name,
+    const passwordHash = await PasswordHasher.hash(config.password);
+    const userId = uuidv7();
+    const user = userRepository.create({
+      userId,
+      fullName: config.name,
       email: config.email,
-      hashedPassword,
+      passwordHash,
     });
 
-    const savedUser = await manager.save(user);
+    await userRepository.save(user);
     this.logger.log(`Recruiter user "${config.name}" created`);
 
-    const role = manager.create(UserRole, {
-      userId: savedUser.id,
-      roleName: UserRoleEnum.RECRUITER,
+    const role = userRoleRepository.create({
+      userId,
+      role: UserRoleEnum.RECRUITER,
     });
 
-    await manager.save(role);
+    await userRoleRepository.save(role);
     this.logger.log(`RECRUITER role assigned to "${config.name}"`);
   }
 }

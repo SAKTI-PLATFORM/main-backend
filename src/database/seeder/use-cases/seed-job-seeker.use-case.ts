@@ -1,10 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { JobseekerProfile } from 'src/domain/entity/jobseeker-profile.entity';
 import { UserRole } from 'src/domain/entity/user-role.entity';
 import { User } from 'src/domain/entity/user.entity';
 import { UserRoleEnum } from 'src/domain/enums/user-role.enum';
 import { PasswordHasher } from 'src/libs/PasswordHasher/PasswordHasher';
 import { EntityManager } from 'typeorm';
+import { uuidv7 } from 'uuidv7';
 import { ISeederUseCase } from './abstract-seeder-usecase';
 
 @Injectable()
@@ -27,26 +29,33 @@ export class SeedJobSeekerUseCase extends ISeederUseCase {
       return;
     }
 
-    const existingUser = await manager.findOne(User, { where: { email } });
+    const userRepository = manager.getRepository(User);
+    const userRoleRepository = manager.getRepository(UserRole);
+    const profileRepository = manager.getRepository(JobseekerProfile);
+
+    const existingUser = await userRepository.findOne({ where: { email } });
     if (existingUser) {
       this.logger.log('Job seeker user already exists, skipping...');
       return;
     }
 
-    const hashedPassword = await PasswordHasher.hash(password);
-    const user = manager.create(User, {
-      username: name,
+    const passwordHash = await PasswordHasher.hash(password);
+    const userId = uuidv7();
+    const user = userRepository.create({
+      userId,
+      fullName: name,
       email,
-      hashedPassword,
+      passwordHash,
     });
-    const savedUser = await manager.save(user);
+    await userRepository.save(user);
     this.logger.log(`Job seeker user "${name}" created`);
 
-    const role = manager.create(UserRole, {
-      userId: savedUser.id,
-      roleName: UserRoleEnum.JOB_SEEKER,
+    const role = userRoleRepository.create({
+      userId,
+      role: UserRoleEnum.JOB_SEEKER,
     });
-    await manager.save(role);
+    await userRoleRepository.save(role);
+    await profileRepository.save(profileRepository.create({ userId }));
     this.logger.log(`JOB_SEEKER role assigned to "${name}"`);
   }
 
@@ -56,15 +65,15 @@ export class SeedJobSeekerUseCase extends ISeederUseCase {
   }
 
   async truncate(manager: EntityManager): Promise<void> {
-    this.logger.log('Truncating users and user_roles tables...');
+    this.logger.log('Truncating user and user_role tables...');
 
     await manager.query('SET FOREIGN_KEY_CHECKS = 0');
-    await manager.query('TRUNCATE TABLE `user_roles`');
-    this.logger.log('Table user_roles truncated');
-    await manager.query('TRUNCATE TABLE `users`');
-    this.logger.log('Table users truncated');
+    await manager.query('TRUNCATE TABLE `user_role`');
+    this.logger.log('Table user_role truncated');
+    await manager.query('TRUNCATE TABLE `user`');
+    this.logger.log('Table user truncated');
     await manager.query('SET FOREIGN_KEY_CHECKS = 1');
 
-    this.logger.log('Users and user_roles tables truncated successfully');
+    this.logger.log('User and user_role tables truncated successfully');
   }
 }

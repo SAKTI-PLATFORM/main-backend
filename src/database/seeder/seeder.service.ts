@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Injectable, Logger } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { SeedJobSeekerUseCase } from './use-cases/seed-job-seeker.use-case';
@@ -37,9 +36,14 @@ export class SeederService {
     await this.dataSource.transaction(async (manager) => {
       await manager.query('SET FOREIGN_KEY_CHECKS = 0');
 
-      const tables = (await manager.query(
+      const tables = await manager.query<
+        Array<{
+          TABLE_NAME?: string;
+          table_name?: string;
+        }>
+      >(
         `SELECT table_name FROM information_schema.tables WHERE table_schema = DATABASE()`,
-      )) as Array<{ TABLE_NAME?: string; table_name?: string }>;
+      );
 
       for (const table of tables) {
         const tableName = table.TABLE_NAME || table.table_name;
@@ -78,9 +82,14 @@ export class SeederService {
     await this.dataSource.transaction(async (manager) => {
       await manager.query('SET FOREIGN_KEY_CHECKS = 0');
 
-      const tables = (await manager.query(
+      const tables = await manager.query<
+        Array<{
+          TABLE_NAME?: string;
+          table_name?: string;
+        }>
+      >(
         `SELECT table_name FROM information_schema.tables WHERE table_schema = DATABASE()`,
-      )) as Array<{ TABLE_NAME?: string; table_name?: string }>;
+      );
 
       for (const table of tables) {
         const tableName = table.TABLE_NAME || table.table_name;
