@@ -11,6 +11,9 @@ export class UserMapper {
       phoneNumber: user.phoneNumber ?? null,
       photoUrl: user.photoUrl ?? null,
       domicile: user.domicile ?? null,
+      professionalHeadline: user.jobseekerProfile?.professionalHeadline ?? null,
+      linkedinUrl: user.jobseekerProfile?.linkedinUrl ?? null,
+      profileSummary: user.jobseekerProfile?.profileSummary ?? null,
       roles: user.getRoleNames(),
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
@@ -39,6 +42,15 @@ export class ProfileResponse {
 
   @ApiProperty({ nullable: true, example: 'Jakarta' })
   domicile: string | null;
+
+  @ApiProperty({ nullable: true, example: 'Software Engineer' })
+  professionalHeadline: string | null;
+
+  @ApiProperty({ nullable: true, example: 'linkedin.com/in/john' })
+  linkedinUrl: string | null;
+
+  @ApiProperty({ nullable: true })
+  profileSummary: string | null;
 
   @ApiProperty({
     description: 'User roles',
