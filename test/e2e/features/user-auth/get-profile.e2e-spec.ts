@@ -3,7 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import { UserRoleEnum } from 'src/domain/enums/user-role.enum';
 import { DataResponse } from 'src/infrastructure/core/http/http-response';
 import { ProfileResponse } from 'src/libs/Mapper/UserMapper';
-import request from 'supertest';
+import * as request from 'supertest';
 import TestAgent from 'supertest/lib/agent';
 import { App } from 'supertest/types';
 import { DataSource } from 'typeorm';
@@ -59,7 +59,7 @@ describe('Get Profile (e2e)', () => {
       expect(body).toHaveProperty('statusCode', 200);
       expect(body).toHaveProperty('message', 'Profil berhasil diambil');
       expect(body).toHaveProperty('data');
-      expect(body.data).toHaveProperty('id', user.id);
+      expect(body.data).toHaveProperty('userId', user.userId);
       expect(body.data).toHaveProperty(
         'email',
         defaultJobSeekerCredentials.email,
@@ -79,7 +79,7 @@ describe('Get Profile (e2e)', () => {
 
       const body = response.body as DataResponse<ProfileResponse>;
       expect(body).toHaveProperty('statusCode', 200);
-      expect(body.data).toHaveProperty('id', user.id);
+      expect(body.data).toHaveProperty('userId', user.userId);
       expect(body.data).toHaveProperty(
         'email',
         defaultRecruiterCredentials.email,
@@ -97,9 +97,12 @@ describe('Get Profile (e2e)', () => {
         .expect(200);
 
       const body = response.body as DataResponse<ProfileResponse>;
-      expect(body.data).toHaveProperty('id');
-      expect(body.data).toHaveProperty('username');
+      expect(body.data).toHaveProperty('userId');
+      expect(body.data).toHaveProperty('fullName');
       expect(body.data).toHaveProperty('email');
+      expect(body.data).toHaveProperty('phoneNumber');
+      expect(body.data).toHaveProperty('photoUrl');
+      expect(body.data).toHaveProperty('domicile');
       expect(body.data).toHaveProperty('roles');
       expect(body.data).toHaveProperty('createdAt');
       expect(body.data).toHaveProperty('updatedAt');

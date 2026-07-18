@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { INestApplication } from '@nestjs/common';
 import { IAuthToken } from 'src/auth/interfaces/auth-token.interface';
+import { JobseekerProfile } from 'src/domain/entity/jobseeker-profile.entity';
 import { User } from 'src/domain/entity/user.entity';
 import { UserRoleEnum } from 'src/domain/enums/user-role.enum';
 import { DataResponse } from 'src/infrastructure/core/http/http-response';
-import request from 'supertest';
+import * as request from 'supertest';
 import TestAgent from 'supertest/lib/agent';
 import { App } from 'supertest/types';
 import { DataSource } from 'typeorm';
@@ -76,8 +77,8 @@ describe('Register (e2e)', () => {
       expect(body.data).toHaveProperty('token');
     });
 
-    it('should store the token in activeToken field after successful registration', async () => {
-      const response = await requestTestAgent
+    it('should create the ERD user and jobseeker profile records', async () => {
+      await requestTestAgent
         .post('/auth/register')
         .send({
           fullName: 'John Doe',
@@ -88,12 +89,17 @@ describe('Register (e2e)', () => {
         })
         .expect(201);
 
-      const body = response.body as DataResponse<IAuthToken>;
       const user = await dataSource.manager.findOne(User, {
         where: { email: 'john.doe@example.com' },
       });
+      if (!user) throw new Error('Registered user was not persisted');
+      const profile = await dataSource.manager.findOne(JobseekerProfile, {
+        where: { userId: user.userId },
+      });
 
-      expect(user?.activeToken).toBe(body.data.token);
+      expect(user.fullName).toBe('John Doe');
+      expect(user.passwordHash).toBeTruthy();
+      expect(profile?.userId).toBe(user.userId);
     });
 
     it('should return 409 when email already exists', async () => {

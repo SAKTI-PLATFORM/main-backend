@@ -1,4 +1,5 @@
 import { IAuthToken } from 'src/auth/interfaces/auth-token.interface';
+import { JobseekerProfile } from 'src/domain/entity/jobseeker-profile.entity';
 import { UserRole } from 'src/domain/entity/user-role.entity';
 import { User } from 'src/domain/entity/user.entity';
 import { UserRoleEnum } from 'src/domain/enums/user-role.enum';
@@ -27,20 +28,25 @@ export async function createJobSeekerUser(
     password: string;
   } = defaultJobSeekerCredentials,
 ): Promise<User> {
-  const hashedPassword = await PasswordHasher.hash(credentials.password);
+  const passwordHash = await PasswordHasher.hash(credentials.password);
 
   const user = dataSource.manager.create(User, {
-    username: credentials.fullName,
+    fullName: credentials.fullName,
     email: credentials.email,
-    hashedPassword,
+    passwordHash,
   });
   const savedUser = await dataSource.manager.save(user);
 
   const userRole = dataSource.manager.create(UserRole, {
-    userId: savedUser.id,
-    roleName: UserRoleEnum.JOB_SEEKER,
+    userId: savedUser.userId,
+    role: UserRoleEnum.JOB_SEEKER,
   });
   await dataSource.manager.save(userRole);
+  await dataSource.manager.save(
+    dataSource.manager.create(JobseekerProfile, {
+      userId: savedUser.userId,
+    }),
+  );
 
   return savedUser;
 }
@@ -53,18 +59,18 @@ export async function createRecruiterUser(
     password: string;
   } = defaultRecruiterCredentials,
 ): Promise<User> {
-  const hashedPassword = await PasswordHasher.hash(credentials.password);
+  const passwordHash = await PasswordHasher.hash(credentials.password);
 
   const user = dataSource.manager.create(User, {
-    username: credentials.fullName,
+    fullName: credentials.fullName,
     email: credentials.email,
-    hashedPassword,
+    passwordHash,
   });
   const savedUser = await dataSource.manager.save(user);
 
   const userRole = dataSource.manager.create(UserRole, {
-    userId: savedUser.id,
-    roleName: UserRoleEnum.RECRUITER,
+    userId: savedUser.userId,
+    role: UserRoleEnum.RECRUITER,
   });
   await dataSource.manager.save(userRole);
 

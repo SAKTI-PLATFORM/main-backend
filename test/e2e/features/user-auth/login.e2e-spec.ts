@@ -3,7 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import { IAuthToken } from 'src/auth/interfaces/auth-token.interface';
 import { User } from 'src/domain/entity/user.entity';
 import { DataResponse } from 'src/infrastructure/core/http/http-response';
-import request from 'supertest';
+import * as request from 'supertest';
 import TestAgent from 'supertest/lib/agent';
 import { App } from 'supertest/types';
 import { DataSource } from 'typeorm';
@@ -80,25 +80,6 @@ describe('Login (e2e)', () => {
       expect(body.data).toHaveProperty('token');
     });
 
-    it('should store the token in activeToken field after successful login', async () => {
-      const user = await createJobSeekerUser(dataSource);
-
-      const response = await requestTestAgent
-        .post('/auth/login')
-        .send({
-          email: defaultJobSeekerCredentials.email,
-          password: defaultJobSeekerCredentials.password,
-        })
-        .expect(200);
-
-      const body = response.body as DataResponse<IAuthToken>;
-      const updatedUser = await dataSource.manager.findOne(User, {
-        where: { id: user.id },
-      });
-
-      expect(updatedUser?.activeToken).toBe(body.data.token);
-    });
-
     it('should return 401 when email does not exist', async () => {
       const response = await requestTestAgent
         .post('/auth/login')
@@ -131,10 +112,10 @@ describe('Login (e2e)', () => {
 
     it('should return 401 when user registered via Google tries to login with password', async () => {
       const googleUser = dataSource.manager.create(User, {
-        username: 'Google User',
+        fullName: 'Google User',
         email: 'googleuser@example.com',
         googleId: 'google-sub-12345',
-        hashedPassword: null,
+        passwordHash: null,
       });
       await dataSource.manager.save(googleUser);
 
@@ -146,7 +127,7 @@ describe('Login (e2e)', () => {
         })
         .expect(401);
 
-      const body = response.body;
+      const body = response.body as { statusCode: number; error: string };
       expect(body).toHaveProperty('statusCode', 401);
       expect(body.error).toContain('Google');
     });
@@ -188,8 +169,8 @@ describe('Login (e2e)', () => {
       expect(body).toHaveProperty('statusCode', 400);
     });
 
-    it('should override existing activeToken on subsequent logins', async () => {
-      const user = await createJobSeekerUser(dataSource);
+    it('should issue a unique token on subsequent logins', async () => {
+      await createJobSeekerUser(dataSource);
 
       const firstResponse = await requestTestAgent
         .post('/auth/login')
@@ -210,12 +191,7 @@ describe('Login (e2e)', () => {
       const firstBody = firstResponse.body as DataResponse<IAuthToken>;
       const secondBody = secondResponse.body as DataResponse<IAuthToken>;
 
-      const updatedUser = await dataSource.manager.findOne(User, {
-        where: { id: user.id },
-      });
-
-      expect(updatedUser?.activeToken).toBe(secondBody.data.token);
-      expect(updatedUser?.activeToken).not.toBe(firstBody.data.token);
+      expect(secondBody.data.token).not.toBe(firstBody.data.token);
     });
   });
 });
