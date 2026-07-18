@@ -1,7 +1,7 @@
 {
   "exclude": ["node_modules", "dist", "coverage"],
   "paths": {
-    "src/*": ["src/*"]
+    "src/*": ["./src/*"]
   },
   "typeRoots": ["./src/types", "./node_modules/@types"],
   "compilerOptions": {
@@ -14,9 +14,8 @@
     "target": "ES2023",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "./",
     "paths": {
-      "src/*": ["src/*"]
+      "src/*": ["./src/*"]
     },
     "incremental": true,
     "skipLibCheck": true,
