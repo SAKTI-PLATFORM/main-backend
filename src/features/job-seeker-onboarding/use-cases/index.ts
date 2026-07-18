@@ -4,3 +4,4 @@ export * from './create-experience/create-experience.usecase';
 export * from './create-project/create-project.usecase';
 export * from './create-skill/create-skill.usecase';
 export * from './parse-cv/parse-cv.usecase';
+export * from './update-identity/update-identity.usecase';

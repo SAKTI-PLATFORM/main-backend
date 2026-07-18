@@ -6,7 +6,30 @@ export class OnboardingRecordResponse {
   id!: string;
 }
 
-export class ParseCvInsertedCountsResponse {
+export class IdentityResponse {
+  @ApiProperty()
+  fullName!: string;
+
+  @ApiProperty()
+  email!: string;
+
+  @ApiProperty({ nullable: true })
+  phoneNumber!: string | null;
+
+  @ApiProperty({ nullable: true })
+  domicile!: string | null;
+
+  @ApiProperty({ nullable: true })
+  professionalHeadline!: string | null;
+
+  @ApiProperty({ nullable: true })
+  linkedinUrl!: string | null;
+
+  @ApiProperty({ nullable: true })
+  profileSummary!: string | null;
+}
+
+export class ParseCvDetectedCountsResponse {
   @ApiProperty()
   educations!: number;
 
@@ -33,8 +56,8 @@ export class ParseCvResponse {
   @ApiProperty()
   confidenceScore!: number;
 
-  @ApiProperty({ type: ParseCvInsertedCountsResponse })
-  inserted!: ParseCvInsertedCountsResponse;
+  @ApiProperty({ type: ParseCvDetectedCountsResponse })
+  detected!: ParseCvDetectedCountsResponse;
 
   parsedResult!: SaktiCvParseResult;
 }
