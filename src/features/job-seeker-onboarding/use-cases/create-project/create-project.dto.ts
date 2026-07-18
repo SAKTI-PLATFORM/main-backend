@@ -1,7 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsOptional, IsString } from 'class-validator';
+import { IsDateString, IsEnum, IsOptional, IsString } from 'class-validator';
+import { RecordSource } from 'src/domain/enums/record-source.enum';
 
 export class CreateProjectDto {
+  @ApiProperty({ enum: RecordSource, required: false })
+  @IsOptional()
+  @IsEnum(RecordSource)
+  source?: RecordSource;
+
   @ApiProperty()
   @IsString()
   projectName!: string;

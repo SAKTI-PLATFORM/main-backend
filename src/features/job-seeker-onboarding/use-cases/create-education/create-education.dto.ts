@@ -9,9 +9,17 @@ import {
   Max,
   Min,
 } from 'class-validator';
-import { EducationLevel } from 'src/domain/enums/record-source.enum';
+import {
+  EducationLevel,
+  RecordSource,
+} from 'src/domain/enums/record-source.enum';
 
 export class CreateEducationDto {
+  @ApiProperty({ enum: RecordSource, required: false })
+  @IsOptional()
+  @IsEnum(RecordSource)
+  source?: RecordSource;
+
   @ApiProperty({ enum: EducationLevel, required: false })
   @IsOptional()
   @IsEnum(EducationLevel)

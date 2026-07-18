@@ -27,7 +27,7 @@ export class CreateExperienceUseCase {
       isCurrent: dto.isCurrent ?? false,
       durationMonths: dto.durationMonths ?? null,
       description: dto.description ?? null,
-      source: RecordSource.MANUAL,
+      source: dto.source ?? RecordSource.MANUAL,
     });
     const saved = await this.experienceRepository.save(experience);
     return { id: saved.experienceId };

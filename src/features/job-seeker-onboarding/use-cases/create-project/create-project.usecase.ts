@@ -24,7 +24,7 @@ export class CreateProjectUseCase {
       toolsUsed: dto.toolsUsed ?? null,
       startDate: dto.startDate ?? null,
       endDate: dto.endDate ?? null,
-      source: RecordSource.MANUAL,
+      source: dto.source ?? RecordSource.MANUAL,
     });
     const saved = await this.projectRepository.save(project);
     return { id: saved.projectId };

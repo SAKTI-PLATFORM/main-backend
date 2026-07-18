@@ -23,7 +23,7 @@ export class CreateCertificationUseCase {
       issuer: dto.issuer,
       issuedYear: dto.issuedYear ?? null,
       certificateUrl: dto.certificateUrl ?? null,
-      source: RecordSource.MANUAL,
+      source: dto.source ?? RecordSource.MANUAL,
     });
     const saved = await this.certificationRepository.save(certification);
     return { id: saved.certificationId };

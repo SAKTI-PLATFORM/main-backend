@@ -27,7 +27,7 @@ export class CreateEducationUseCase {
       endYear: dto.endYear ?? null,
       gpa: dto.gpa ?? null,
       isCurrent: dto.isCurrent ?? false,
-      source: RecordSource.MANUAL,
+      source: dto.source ?? RecordSource.MANUAL,
     });
     const saved = await this.educationRepository.save(education);
     return { id: saved.educationId };

@@ -3,13 +3,20 @@ import { Type } from 'class-transformer';
 import {
   IsBoolean,
   IsDateString,
+  IsEnum,
   IsInt,
   IsOptional,
   IsString,
   Min,
 } from 'class-validator';
+import { RecordSource } from 'src/domain/enums/record-source.enum';
 
 export class CreateExperienceDto {
+  @ApiProperty({ enum: RecordSource, required: false })
+  @IsOptional()
+  @IsEnum(RecordSource)
+  source?: RecordSource;
+
   @ApiProperty()
   @IsString()
   title!: string;

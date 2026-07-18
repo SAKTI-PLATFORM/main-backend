@@ -1,8 +1,21 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsInt, IsOptional, IsString, IsUrl, Min } from 'class-validator';
+import {
+  IsEnum,
+  IsInt,
+  IsOptional,
+  IsString,
+  IsUrl,
+  Min,
+} from 'class-validator';
+import { RecordSource } from 'src/domain/enums/record-source.enum';
 
 export class CreateCertificationDto {
+  @ApiProperty({ enum: RecordSource, required: false })
+  @IsOptional()
+  @IsEnum(RecordSource)
+  source?: RecordSource;
+
   @ApiProperty()
   @IsString()
   certificationName!: string;
