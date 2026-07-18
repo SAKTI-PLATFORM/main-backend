@@ -9,7 +9,7 @@ import {
 import { uuidv7 } from 'uuidv7';
 import { User } from './user.entity';
 
-@Entity({ name: 'skills' })
+@Entity({ name: 'jobseeker_skills' })
 export class UserSkill {
   @PrimaryColumn({ name: 'user_skill_id', type: 'char', length: 36 })
   userSkillId!: string;
@@ -28,16 +28,14 @@ export class UserSkill {
   })
   detectedText?: string | null;
 
-  @Column({
-    name: 'inferred_level',
-    type: 'varchar',
-    length: 100,
-    nullable: true,
-  })
-  inferredLevel?: string | null;
-
   @Column({ name: 'confidence_score', type: 'float', nullable: true })
   confidenceScore?: number | null;
+
+  @Column({ name: 'learning_hours', type: 'float', nullable: true })
+  learningHours?: number | null;
+
+  @Column({ name: 'working_hours', type: 'float', nullable: true })
+  workingHours?: number | null;
 
   @Column({
     name: 'evidence_source',

@@ -14,16 +14,25 @@ export class CreateSkillDto {
 
   @ApiProperty({ required: false })
   @IsOptional()
-  @IsString()
-  inferredLevel?: string;
-
-  @ApiProperty({ required: false })
-  @IsOptional()
   @Type(() => Number)
   @IsNumber()
   @Min(0)
   @Max(1)
   confidenceScore?: number;
+
+  @ApiProperty({ required: false, minimum: 0, example: 120 })
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(0)
+  learningHours?: number;
+
+  @ApiProperty({ required: false, minimum: 0, example: 480 })
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(0)
+  workingHours?: number;
 
   @ApiProperty({ required: false })
   @IsOptional()

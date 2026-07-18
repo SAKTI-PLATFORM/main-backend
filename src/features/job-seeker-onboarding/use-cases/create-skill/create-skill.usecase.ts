@@ -21,8 +21,9 @@ export class CreateSkillUseCase {
       userId,
       skillId: dto.skillId ?? uuidv7(),
       detectedText: dto.detectedText,
-      inferredLevel: dto.inferredLevel ?? null,
       confidenceScore: dto.confidenceScore ?? null,
+      learningHours: dto.learningHours ?? null,
+      workingHours: dto.workingHours ?? null,
       evidenceSource: dto.evidenceSource ?? 'manual',
       evidenceStrength: dto.evidenceStrength ?? null,
     });
