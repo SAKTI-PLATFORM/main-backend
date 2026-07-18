@@ -27,7 +27,5 @@ export default Joi.object({
   JWT_EXPIRES: Joi.string().default('7d'),
 
   GOOGLE_CLIENT_ID: Joi.string().optional(),
-
   SAKTI_AI_URL: Joi.string().uri().default('http://localhost:8001'),
-  MICROSERVICES_URL: Joi.string().uri().default('http://localhost:9000'),
 });

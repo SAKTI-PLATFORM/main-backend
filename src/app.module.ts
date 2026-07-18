@@ -2,16 +2,12 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LoggerModule } from 'nestjs-pino';
-import { SeekerCareerModule } from './features/seeker-career/seeker-career.module';
-import { SeekerDashboardModule } from './features/seeker-dashboard/seeker-dashboard.module';
-import { SeekerOnboardingModule } from './features/seeker-onboarding/seeker-onboarding.module';
+import { JobSeekerOnboardingModule } from './features/job-seeker-onboarding/job-seeker-onboarding.module';
 import { UserAuthModule } from './features/user-auth/user-auth.module';
 import app from './infrastructure/config/app/app.config';
 import { dataSourceOptions } from './infrastructure/config/database/typeorm.config';
 import environmentValidation from './infrastructure/config/environment.validation';
 import { createPinoLoggerOptions } from './infrastructure/core/logger/pino-logger.factory';
-import { MicroservicesModule } from './infrastructure/microservices/microservices.module';
-import { SaktiAiModule } from './infrastructure/sakti-ai/sakti-ai.module';
 
 const env: string = process.env.NODE_ENV || 'development';
 
@@ -34,12 +30,8 @@ const env: string = process.env.NODE_ENV || 'development';
       autoLoadEntities: true,
     }),
 
-    SaktiAiModule,
-    MicroservicesModule,
     UserAuthModule,
-    SeekerOnboardingModule,
-    SeekerCareerModule,
-    SeekerDashboardModule,
+    JobSeekerOnboardingModule,
   ],
 })
 export class AppModule {}
